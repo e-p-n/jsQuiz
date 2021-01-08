@@ -4,10 +4,14 @@ var correctAnswer = "";
 var timerEl = document.querySelector('#timer');
 var introEl = document.querySelector('#intro');
 var questionAreaEl = document.querySelector('section');
+console.log(questionAreaEl);
 var questionEl = document.querySelector('section h1');
 var answerEl = document.querySelector('section div');
 var startButtonEl = document.querySelector('section button');
-var highScore = []
+var highScore = JSON.parse(localStorage.getItem("scores"));
+if (!highScore) {
+    highScore = [];
+}
 var timerCountdown;
 var noOfCorrectAnswers = 0;
 var answerStatus = null;
@@ -25,7 +29,7 @@ var theQuiz = [
     {
         Q: "The condition in an if / else statement is enclosed with ________.",
         A: ["quotes", 
-            "curly brakets",
+            "curly brackets",
             "parenthesis",
             "square brackets"],
         CA: "parenthesis"
@@ -56,47 +60,7 @@ var theQuiz = [
     }
 ];
 
-
-function displayQuestion() {
-    if (answerStatus) {
-        markAnswer(answerStatus);
-    }
-    //Check if this is the first question. If so remove the start button
-    if (questionNumber === 0) {
-        startButtonEl.remove();
-    } 
-    //check if the last question has been asked. If so end quiz.
-    if (questionNumber === theQuiz.length) {
-        endQuiz();
-    } else {
-        correctAnswer = theQuiz[questionNumber].CA;
-        // display question on screen
-        questionEl.textContent = theQuiz[questionNumber].Q;
-        questionEl.style.textAlign = "left";
-        answerEl.style.textAlign = "left";
-        answerEl.textContent = "";
-        let noOfAnswers = theQuiz[questionNumber].A.length;
-        let answerListEl = document.createElement("ol");
-    
-        for (var i=0; i<noOfAnswers; i++) {
-            let displayedAnswer = Math.floor(Math.random()*theQuiz[questionNumber].A.length);
-            //loops through answers and puts them on screen in random order
-            if (theQuiz[questionNumber].A.length > 1 && theQuiz[questionNumber].A[displayedAnswer] === "all of the above") {
-                displayedAnswer--;
-            }
-            let answerOptionEl = document.createElement("a");
-            answerOptionEl.href = "#";
-            answerOptionEl.innerHTML = "<li>" + theQuiz[questionNumber].A[displayedAnswer] + "</li>";
-            answerListEl.appendChild(answerOptionEl);
-            theQuiz[questionNumber].A.splice(displayedAnswer, 1); 
-        }
-        answerEl.appendChild(answerListEl);
-
-        answerListEl.addEventListener("click", checkAnswer);
-        questionNumber++;
-    }
-}
-
+// Checks if answer clicked matches the correct answer
 function checkAnswer(event) {
     let answerClicked = event.target.textContent;
 
@@ -127,10 +91,51 @@ function markAnswer(ans) {
  
 }
 
+
+function displayQuestion() {
+    if (answerStatus) {
+        markAnswer(answerStatus);
+    }
+    //Check if this is the first question. If so remove the start button
+    if (questionNumber === 0) {
+        startButtonEl.remove();
+    } 
+    //check if the last question has been asked. If so end quiz.
+    if (questionNumber === theQuiz.length) {
+        endQuiz();
+    } else {
+        correctAnswer = theQuiz[questionNumber].CA;
+
+        // display question on screen
+        questionEl.textContent = theQuiz[questionNumber].Q;
+        questionEl.style.textAlign = "left";
+        answerEl.style.textAlign = "left";
+        answerEl.textContent = "";
+        let noOfAnswers = theQuiz[questionNumber].A.length;
+        let answerListEl = document.createElement("ol");
+        
+        //loops through answers and puts them on screen in random order
+        for (var i=0; i<noOfAnswers; i++) {
+            let displayedAnswer = Math.floor(Math.random()*theQuiz[questionNumber].A.length);
+            if (theQuiz[questionNumber].A.length > 1 && theQuiz[questionNumber].A[displayedAnswer] === "all of the above") {
+                displayedAnswer--;
+            }
+            let answerOptionEl = document.createElement("a");
+            answerOptionEl.href = "#";
+            answerOptionEl.innerHTML = "<li>" + theQuiz[questionNumber].A[displayedAnswer] + "</li>";
+            answerListEl.appendChild(answerOptionEl);
+            theQuiz[questionNumber].A.splice(displayedAnswer, 1); 
+        }
+
+        answerEl.appendChild(answerListEl);
+        questionNumber++;
+        answerListEl.addEventListener("click", checkAnswer);
+    }
+}
+
 function endQuiz() {
-    answerEl.textContent="";
     clearInterval(timerCountdown); 
-    // Checks to make sure the player got at least one answer right.
+    // Checks to make sure the player got at least one answer right and changes the score to 0 if the did not.
     if (noOfCorrectAnswers === 0) {
         score = 0;
     } 
@@ -139,10 +144,19 @@ function endQuiz() {
     if (score > 0) {
         let finalForm = document.createElement("form");
         //let formLabel = setAttribute("label");
-        finalForm.innerHTML = "<label>Enter Initials</label><input type=text name='initials' id='initials'><input class='submit' type='submit' value='Submit'> "
+        finalForm.innerHTML = "<label>Enter Initials</label><input type='text' name='initials' id='initials' maxlength='3'><input class='submit' type='submit' value='Submit'> "
         //formLabel.textContent = "Enter Initials";
         answerEl.appendChild(finalForm);
-
+        var submitScoreButtonEl = document.querySelector(".submit")
+        submitScoreButtonEl.addEventListener("click", saveHighScore);
+    } else {
+        let restartButton = document.createElement("button");
+        restartButton.textContent = "Try again";
+        answerEl.appendChild(restartButton);
+        var restartButtonEl = document.querySelector("button");
+        restartButtonEl.addEventListener("click", function(){
+            location.reload();
+        });
     }
 
 }
@@ -162,12 +176,31 @@ function runTimer() {
 
     }, 1000)
 }
+function saveHighScore(event) {
+    event.preventDefault();
+
+    let initials = document.getElementById('initials').value;
+    if (initials) {
+        newScore = {init:initials.toUpperCase(), scr:score};
+        highScore.push(newScore);
+        //console.log("Highscore after push: ");
+        console.log("Highscore after push: ", highScore);
+        highScore.sort((a, b) => a.scr - b.scr);
+        highScore.reverse();
+        console.log(highScore)
+        if (highScore.length > 10) {
+            highScore.splice(10,1);
+        }
+        localStorage.setItem("scores", JSON.stringify(highScore));
+        //window.location = "highScores.html";    
+    }
+}
 
 function startQuiz() {
     displayQuestion(questionNumber);
     runTimer();
 }
 
-startButtonEl.addEventListener("click", startQuiz)
+startButtonEl.addEventListener("click", startQuiz);
 
 //localStorage.clear();
