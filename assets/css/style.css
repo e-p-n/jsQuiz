@@ -1,0 +1,93 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #44e9ff;
+  --secondary: #497980;
+  --tertiary: rgb(192, 246, 253);
+  --grey: #333;
+}
+
+body {
+  color: #000;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 24px;
+}
+
+header {
+  padding: 10px;
+}
+header #high-score {
+    float: left;
+}
+header #score {
+    float: right;
+}
+
+header div {
+  color: var(--secondary);
+  margin: 5px 0 20px;
+  font-size: 14px;
+}
+
+section {
+  margin: 10px auto;
+  width: 75%;
+  text-align: center;
+}
+
+section h1 {
+  font-size: 36px;
+}
+section ol {
+  width:fit-content;
+}
+section button, section form .submit {
+  margin: 8px auto;
+}
+section ol a, section button, section form .submit {
+  padding: 15px 30px;
+  background:#440099;
+  margin:15px 0;
+  display:block;
+  color:white;
+  text-align:left;
+  border-radius: 36px;
+  text-decoration: none;
+  font-size: 24px;
+  border: none;
+  transition: all .35s
+ 
+}
+section ol a {
+  padding-left: 55px;
+  width: 100%;
+  padding-right: 40px;
+  border-radius: 0 36px 36px 0;
+}
+section ol a:hover {
+  background: #8833CC;
+  width: 110%;
+}
+
+section button:hover, section form .submit {
+  background: #8833CC;
+  cursor: pointer;
+}
+
+#answer-mark {
+  width: 100%;
+  margin-top: 30px;
+  border-top: 2px solid #666;
+  color: #666;
+  padding-top: 20px;
+  font-size: 36px;
+  font-style: italic;
+  text-align: left;
+}
