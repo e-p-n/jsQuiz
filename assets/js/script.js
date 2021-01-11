@@ -3,10 +3,10 @@ var score = 75;
 var correctAnswer = "";
 var timerEl = document.querySelector('#timer');
 var introEl = document.querySelector('#intro');
-var questionAreaEl = document.querySelector('section');
+var questionAreaEl = document.querySelector('#question-answers');
 var questionEl = document.querySelector('#question');
-var answerEl = document.querySelector('section div');
-var startButtonEl = document.querySelector('section button');
+var answerEl = document.querySelector('#options');
+var startButtonEl = document.querySelector('.button');
 var highScore = JSON.parse(localStorage.getItem('scores'));
 if (!highScore) {
     highScore = [];

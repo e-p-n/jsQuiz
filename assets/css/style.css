@@ -14,28 +14,26 @@ body {
   color: #000;
   margin: 0;
   padding: 0;
-  display: flex;
   min-height: 100vh;
-  flex-direction: column;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 header {
-  padding: 20px 30px;
+  padding: 25px 30px 115px;
+  font-size: 0.6rem;
 }
+
+/* position high score link and time left in header */
+
 header #high-score {
     float: left;
 }
 header #score {
+    color: var(--grey);
     float: right;
 }
 
-header div {
-  color: var(--grey);
-  margin: 5px 0 20px;
-  font-size: 0.6rem;
-}
-
+/* style high score link */
 #high-score a {
   text-decoration: none;
   color: var(--primary);
@@ -45,14 +43,14 @@ header div {
   color: var(--secondary);
 } 
 
+
 section {
   margin: 10px auto;
   width: 75%;
   text-align: center;
-}s
-
+}
 section h1 {
-  font-size: 1.3rem;
+  font-size: 1.6rem;
 }
 section ol {
   width:fit-content;
@@ -159,6 +157,19 @@ form {
 
 /* MEDIA QUERY FOR TABLETS AND SMALLER */
 @media screen and (max-width: 1024px) {
+  section {
+    width: 100%;
+  }
+}
+
+/* MEDIA QUERY FOR TABLETS AND SMALLER */
+@media screen and (max-width: 768px) {
+  section {
+    width: 90%;
+  }
+  header {
+    padding-bottom: 20px;
+  }
   .even, .odd {
     padding: 10px 30px 10px 70px;
   }  
@@ -186,8 +197,8 @@ form {
     display: block;
     text-align: center;
   }
-  h1 {
-    font-size: 1rem;
+  section h1 {
+    font-size: 1.2rem;
   }
   #initials {
     margin: 10px 0 20px;
